@@ -1,0 +1,11 @@
+logs/
+coverage.out
+coverage.html
+*.test
+
+# Compiled CLI binaries in the module root only. Without the leading slash these patterns
+# also match the cmd/eventtrace/ source directory and silently drop it from the repository.
+/eventtrace
+/eventtrace.exe
+
+_private/
