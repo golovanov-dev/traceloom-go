@@ -147,7 +147,9 @@ Traceloom uses kernel file locks on every supported platform, with no dependenci
 - `.traceloom.lock` coordinates shard selection and rotation;
 - the active JSONL file is locked for one complete append;
 - the kernel releases a lock when the process holding it dies, so a crashed writer cannot strand one;
-- PHP, Node.js, and Go writers can append to the same directory.
+- PHP and Go writers can append to the same directory: both take kernel locks on the same `.traceloom.lock` file and on the active shard.
+
+A Node.js Traceloom writer coordinates through a different primitive — an atomic `.traceloom-js.lock` file, not a kernel lock — so it does not exclude a PHP or Go writer. A Node.js process may read JSONL files that PHP or Go wrote, but it must not concurrently write into a directory that a PHP or Go process is also writing.
 
 Supported platforms are Unix-like systems and Windows. There is no lock-file fallback: a homemade lock has to guess when an owner has died, and guessing wrong puts two writers in the same file.
 
